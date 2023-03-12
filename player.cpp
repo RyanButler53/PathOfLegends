@@ -52,6 +52,10 @@ u_int8_t Player::getLeague() {
     return league_;
 }
 
+bool Player::isUC(){
+    return ultChamp_;
+}
+
 void Player::reset(u_int8_t finishLeague){
     ultChamp_ = false;
     multiplier_ = finishLeague;
@@ -89,9 +93,7 @@ void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
         }
     } else {
         other.winsMatch(*this, curToGold, nextToGold, nextLeague, dropLeague);
-    }
-    //player is overleveled
-    
+    }    
 }
 void Player::winsMatch(Player& other,  u_int8_t curToGold,
                      u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague){
@@ -105,26 +107,31 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     if (step_ == nextLeague){
         ++league_;
         winsToGold_ = nextToGold;
+        // Reaching new league, if can't drop league, make current step gold
         if (!dropLeague){
             currentGold_ = step_;
         }
     } else if (winsToGold_ == 0) {
-        currentGold_ = step_;
-        winsToGold_ = curToGold;
-    } else if (winsToGold_ != 255) { // gold steps.
-        --winsToGold_;
-    } // No gold steps, no new league
+        // "next" win is a golden step
+        currentGold_ = step_; // make next step gold
+        winsToGold_ = curToGold; // reset wins req'd to get next golden step
 
-    // Handle loser
+        // If there are gold steps in the league, reduce steps to golden step
+    } else if (winsToGold_ != 255) {
+        --winsToGold_;
+    } // No gold steps, no new league, just increase step count
+
+    // Handle losing player case
     if (other.step_ != currentGold_){
         --other.step_;
     }
+    ++wins_;
+    ++other.losses_;
     return;
 }
 
 void Player::printToStream(ostream& out) const {
-
-    out << "(" << kingTower_ << "," << cardLevel_ << ", " << step_ <<")" << endl;
+    out << "(" << id_ << "," << cardLevel_ << ", " << step_ <<")" << endl;
 }
 
 ostream& operator<<(ostream& outStream, const Player p){

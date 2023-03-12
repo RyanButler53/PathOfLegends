@@ -6,24 +6,25 @@
 #include <ostream>
 #include <fstream>
 #include <string>
+#include <random> 
 
 class Simulation
 {
 private:
-    
+    std::mt19937 rng_;
     std::vector<Player> players_;
     u_int8_t goldStepRules_[10];
     u_int8_t stepRequirements_[10];
-    u_int8_t levelCaps_[9];
     size_t ultChamps_;
     size_t numPlayers_;
     HashQueue* queue_;
-    bool dropLeague_; 
+    size_t seed_;
+    bool dropLeague_;
 
 public:
 
     // Constructors
-    Simulation(std::string settings, std::string playerFile);
+    Simulation(std::string settings, std::string playerFile, size_t seed);
     ~Simulation();
     Simulation(Simulation &other) = delete;
 

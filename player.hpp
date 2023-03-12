@@ -43,7 +43,7 @@ public:
     ~Player() = default;
     Player &operator=(const Player &other);
 
-    // methods
+    // Methods
 
     // Getters
     u_int8_t getStep();
@@ -54,11 +54,17 @@ public:
     short getWins();
     short getLosses();
     u_int8_t getLeague();
-
+    bool isUC();
 
     /**
-     * @brief Plays a match with another player
-     * @param other player to play match against
+     * @brief Plays a match
+     * 
+     * @param other player to play against
+     * @param randomVal Random value to determine who to win against
+     * @param curToGold Steps to gold step in current league
+     * @param nextToGold Steps to gold step in the next league
+     * @param nextLeague number of steps required for the next league
+     * @param dropLeague If there is golden steps at the end of each league
      */
     void playMatch(Player& other, double randomVal, u_int8_t curToGold,
                          u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague);
@@ -67,20 +73,13 @@ public:
      * @brief updates players when a match is played
      * 
      * @param other the player that *this won against
-     * @param curToGold number fo wins for a golden step in this league
+     * @param curToGold number of wins for a golden step in this league
      * @param nextToGold number of wins for gold in next league
      * @param nextLeague number of steps required for next league
      */
     void winsMatch(Player &other, u_int8_t curToGold, u_int8_t nextToGold,
                      u_int8_t nextLeague, bool dropleague);
-    /**
-     * @brief Checks if a match is allowed to happen
-     *
-     * @param other Player to possibly match against
-     * @param mmType Type of mm rule: 0 = KT, 1 = CL, 2 = none
-     * @return true Match is allowed to happen -> play match
-     * @return false Match is not allowed -> add to queue tree
-     */
+
     bool matchAllowed(Player& other) const;
 
 
