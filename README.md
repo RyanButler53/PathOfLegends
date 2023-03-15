@@ -8,7 +8,7 @@ Simulator for the Path of Legends
 
 ## Roadmap:
  
- Debug! Lots of it. 
+ Debug and write documentation...
  
  - Known issue with reading in unisigned chars. 
  - Finish small run through of the program. 
