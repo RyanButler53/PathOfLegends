@@ -8,12 +8,34 @@ Simulator for the Path of Legends
 
 ## Roadmap:
  
- Debug and write documentation...
+### Development
  
  - Known issue with reading in unisigned chars. 
  - Finish small run through of the program. 
  - Add better way of finding when there is a new UC to implement second version of simulation that goes until $x\%$ are in UC. 
-- Add command line arguments. `-p PLAYER_FILE` and `-i SETTINGS FILE`. I don't care as much about usability since this is "research code", although I want to document this code decently. 
+ - Add a max multiplier param in settings. Expecially useful with shorter paths. 
+- Add command line arguments. `-p PLAYER_FILE` and `-i SETTINGS_FILE`, `-s SEED`, `-o OUTPUT_FILE` Right now small test cases are hard coded to check if it works. 
+- Output: Sim that takes in UC pct used to calculate how many battles needed. Sim that takes in number of battles lets us experiment on parameters for the sytem. 
+- For data analysis, having option to prnt all players to tsv file may be very useful (Can change `<<` operator in player class from `" "` to `\tsv`). 
+
+### Experiments
+- Find out how many battles are played to get a 1% UC
+- Experiment with shortening the path and cutting down golden stps
+	- 5-10 trials of 3-4 settings sims, probably on 10% scale: 
+	- Path Length: 60,  no gold steps in leagues
+	- Path Length: 50, dropping leagues is allowed (Set max multiplier?)
+	-  Path length 30: No golden steps, probably no multiplier)
+- Useful Data Points: 
+	- wins for UC players
+	- W/L ratio (overall, cannot adhere to master 1+ counts rule with league dropping allowed)
+	- count of UC players. 
+
+### Data Analysis
+
+- Avg and Stdev of percent UC players
+- Avg/ Stdev of wins required to get to UC. 
+- Avg/Stdev of Win percent
+- 3-4 plots?
 
 ## Contents of this Repo: 
 
