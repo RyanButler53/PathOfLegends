@@ -24,7 +24,7 @@ private:
 public:
 
     // Constructors
-    Simulation(std::string settings, std::string playerFile, size_t seed);
+    Simulation(std::string settings, std::string playerFile, size_t seed, size_t numPlayers);
     ~Simulation();
     Simulation(Simulation &other) = delete;
 

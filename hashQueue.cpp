@@ -1,6 +1,5 @@
 #include "player.hpp"
 #include "hashQueue.hpp"
-#include <iostream>
 using namespace std;
 
 HashQueue::HashQueue(vector<Player> &players) :
@@ -18,16 +17,19 @@ HashQueue::~HashQueue(){
 
 size_t HashQueue::findOpponent(size_t playerInd){
     u_int8_t league = playerVec_[playerInd].getLeague();
-    // there is an opponent that is not the player looking for a match
-    if (league == 9){
+    cout << "finding opponent for " << playerVec_[playerInd] <<  "in league: " << int(league) << endl;
+    if (league == 9)
+    {
         return numPlayers;
     } else if (queue_[league] != numPlayers and queue_[league] != playerInd) {
         size_t oppIndex = queue_[league];
         // Reset queue
+        cout << "Opponent found. Matching with index " << oppIndex << endl;
         queue_[league] = numPlayers;
-        return queue_[league];
+        return oppIndex;
     } else {
         // Add to queue
+        cout << "no opponent found. Addng " << playerInd << " to queue in league " << int(league) << endl;
         queue_[league] = playerInd;
         return numPlayers;
     }
@@ -37,4 +39,17 @@ void HashQueue::reset(){
     for (size_t i = 0; i < 9; ++i){
         queue_[i] = numPlayers;
     }
+}
+
+void HashQueue::printToStream(ostream& out) const {
+    out << "In queue: ";
+    for (size_t i = 0; i < 9; i++)
+    {
+        out << queue_[i] << " ";
+    }
+}
+
+ostream& operator<<(ostream& outStream, const HashQueue& h){
+    h.printToStream(outStream);
+    return outStream;
 }

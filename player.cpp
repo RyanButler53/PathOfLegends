@@ -12,13 +12,13 @@ using namespace std;
 //     inQueue_{false}{
 //     }
 Player::Player(size_t id, float partyPct, short oldPB, 
-                u_int8_t kingTower, u_int8_t cardLevel):
+                u_int8_t kingTower, u_int8_t cardLevel, u_int8_t winsToGold):
     id_{id}, partyPct_{partyPct}, wins_{0}, losses_{0}, oldPB_{oldPB}, step_{0},
-    kingTower_{kingTower}, cardLevel_{cardLevel},league_{0}, ultChamp_{false}
+    kingTower_{kingTower}, cardLevel_{cardLevel},league_{0}, multiplier_{0},
+    winsToGold_{winsToGold}, currentGold_{0}, ultChamp_{false}
     {
         //nothing to do here
     }
-
 
 u_int8_t Player::getStep(){
     return step_;
@@ -79,7 +79,7 @@ bool Player::matchAllowed(Player& other) const {
 }
 void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
                          u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague){
-
+    cout << "playing match" << endl;
     short pbDiff = abs(oldPB_ - other.oldPB_);
     long double higherPBwins = -0.0000001097213 * pbDiff * pbDiff + 0.00030971 * pbDiff + 0.48544;
 
@@ -87,11 +87,13 @@ void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
     // Assume that low levels wrapped up in low old pb
     if ((oldPB_ > other.oldPB_ and randomVal < higherPBwins) or (oldPB_ < other.oldPB_ and randomVal > higherPBwins)){ 
         // ^ player is higher pb and higher pb wins^^        ^ player is lower pb and higher pb loses
+        cout << "player 1 wins" << endl;
         winsMatch(other, curToGold, nextToGold, nextLeague, dropLeague);
         if (league_ == 9){
             ultChamp_ = true;
         }
     } else {
+        cout << "player2 wins" << endl;
         other.winsMatch(*this, curToGold, nextToGold, nextLeague, dropLeague);
     }    
 }
@@ -131,10 +133,10 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
 }
 
 void Player::printToStream(ostream& out) const {
-    out << "(" << id_ << "," << cardLevel_ << ", " << step_ <<")" << endl;
+    out << "(" << id_ << ", " << int(league_) << ", " << winsToGold_ << ", " << int(currentGold_) << ", " << int(step_) << ")";
 }
 
-ostream& operator<<(ostream& outStream, const Player p){
+ostream& operator<<(ostream& outStream, const Player& p){
     p.printToStream(outStream);
     return outStream;
 }

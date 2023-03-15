@@ -30,6 +30,10 @@ class HashQueue {
          * 
          */
         void reset();
+
+        void printToStream(std::ostream &out) const;
 };
+
+std::ostream& operator<<(std::ostream &out, const HashQueue& h);
 
 #endif
