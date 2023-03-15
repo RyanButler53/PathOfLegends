@@ -131,7 +131,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
 }
 
 void Player::printToStream(ostream& out) const {
-    out << "(" << id_ << ", " << int(league_) << ", " << winsToGold_ << ", " << int(currentGold_) << ", " << int(step_) << ")";
+    out << "(" << id_ << ", " << int(league_) << ", " << int(winsToGold_) << ", " << int(currentGold_) << ", " << int(step_) << ")";
 }
 
 ostream& operator<<(ostream& outStream, const Player& p){

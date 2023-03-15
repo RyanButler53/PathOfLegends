@@ -12,22 +12,20 @@
 using namespace std;
 
 Simulation::Simulation(string settings, string playerFile, size_t seed, size_t numPlayers, string outputFile){
-    vector<Player> players_;
     numPlayers_ = numPlayers;
     u_int8_t kt, cl;
     short oldPB;
     float partyPct;
-    u_int8_t toGoldStep;
+    // Must treat as unsigned ints to properly read in numbers
+    unsigned toGoldStep;
+    unsigned stepReq;
     bool dropLeague;
-
-    // bug; incorrent values are being read in. Issue with unsigned char types? 
-
     ifstream infile(settings);
     ifstream playersIn(playerFile);
-    cout << "file contents:" << endl;
     for (size_t stepRule = 0; stepRule < 9; ++stepRule) {
         //steps req, gold step, lvl cap
-        infile >> stepRequirements_[stepRule];
+        infile >> stepReq;
+        stepRequirements_[stepRule] = stepReq;
         infile >> toGoldStep;
         if (toGoldStep == 0){
             toGoldStep = 255;
@@ -35,23 +33,26 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
         goldStepRules_[stepRule] = toGoldStep;
     }
     size_t id = 0;
-    for (size_t id = 0; id < numPlayers; ++id)
+    for (size_t id = 0; id < numPlayers_; ++id)
     {
         playersIn >> kt;
         playersIn >> oldPB;
         playersIn >> partyPct;
         playersIn >> cl;
-        players_.push_back(Player{id, partyPct, oldPB, kt, cl, goldStepRules_[0]});
+        Player newPlayer = Player{id, partyPct, oldPB, kt, cl, goldStepRules_[0]};
+        players_.push_back(newPlayer);
     }
-    // Need to get UC step requirement. 
-    infile >> stepRequirements_[9];
+    // Need to get UC step requirement.
+    infile >> stepReq;
+    stepRequirements_[9] = stepReq;
+    // cout << "UC requirement: " << int(stepRequirements_[9]) << endl;
     infile >> dropLeague;
     infile >> maxMultiplier_;
     goldStepRules_[9] = 255;
     queue_ = new HashQueue(players_);
     mt19937 rng_(seed);
-    uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
-    
+    // uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
+
 }
 
 Simulation::~Simulation()
@@ -60,6 +61,11 @@ Simulation::~Simulation()
 }
 
 float Simulation::nBattlesSimulation(size_t numBattles){
+    cout << players_.size() << endl;
+    for (auto& p : players_){
+        cout << p << " " << std::flush;
+    }
+    cout << endl;
     size_t battlesPlayed = 0;
     uniform_real_distribution<double> doubleDist(0, 1);
     uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
@@ -75,7 +81,9 @@ float Simulation::nBattlesSimulation(size_t numBattles){
             //play battle
             cout << "playing a battle" << endl;
             double randomVal = doubleDist(rng_);
-            cout << "randomvalue" << randomVal << endl;
+            cout << p1 << endl;
+            cout << players_.size() << endl;
+            cout << players_[p1] << endl;
             u_int8_t league = players_[p1].getLeague();
             u_int8_t curToGold = 0;
             cout << "playing match" << endl;
