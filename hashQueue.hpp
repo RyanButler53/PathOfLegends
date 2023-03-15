@@ -12,7 +12,11 @@ class HashQueue {
         size_t numPlayers;
 
     public:
-        HashQueue(std::vector<Player>& players);
+        HashQueue() = delete;
+        HashQueue(std::vector<Player> &players);
+        HashQueue(const HashQueue &h) = delete;
+        HashQueue& operator=(const HashQueue& h) = delete;
+        
         ~HashQueue();
 
         /**
@@ -21,13 +25,14 @@ class HashQueue {
          * @param player Player index in vector to find an opponent
          * @return size_t If there is an opponent, return that opponent and clear the queue. 
          * If not, add to queue. 
-         * Constant time. 
+         * @note Return the number of players (out of bounds index) means no player was found. 
+         * Constant time operation. 
          */
         size_t findOpponent(size_t playerInd);
 
         /**
          * @brief Perform season reset. Empty the queue. 
-         * 
+         * @
          */
         void reset();
 

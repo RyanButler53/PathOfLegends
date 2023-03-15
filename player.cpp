@@ -6,11 +6,6 @@
 using namespace std;
 
 
-// Player::Player():
-//     id_{0}, partyPct_{0.0}, wins_{0}, losses_{0}, oldPB_{5000}, step_{0},
-//     kingTower_{11}, cardLevel_{88},league_{0}, ultChamp_{false},
-//     inQueue_{false}{
-//     }
 Player::Player(size_t id, float partyPct, short oldPB, 
                 u_int8_t kingTower, u_int8_t cardLevel, u_int8_t winsToGold):
     id_{id}, partyPct_{partyPct}, wins_{0}, losses_{0}, oldPB_{oldPB}, step_{0},
@@ -56,10 +51,13 @@ bool Player::isUC(){
     return ultChamp_;
 }
 
-void Player::reset(u_int8_t finishLeague){
+void Player::reset(u_int8_t finishLeague, u_int8_t maxMultiplier, u_int8_t winsToGold){
     ultChamp_ = false;
-    multiplier_ = finishLeague;
+    multiplier_ = min(finishLeague, maxMultiplier);
+    wins_ = 0;
     step_ = 0;
+    losses_ = 0;
+    winsToGold_ = winsToGold;
 }
 
 bool  Player::operator==(const Player& other) const {

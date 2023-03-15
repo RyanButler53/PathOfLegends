@@ -11,7 +11,7 @@
 #include "simulation.hpp"
 using namespace std;
 
-Simulation::Simulation(string settings, string playerFile, size_t seed, size_t numPlayers){
+Simulation::Simulation(string settings, string playerFile, size_t seed, size_t numPlayers, string outputFile){
     vector<Player> players_;
     numPlayers_ = numPlayers;
     u_int8_t kt, cl;
@@ -20,7 +20,7 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
     u_int8_t toGoldStep;
     bool dropLeague;
 
-    // bug; ncorrent values are being read in. Issue with unsigned char types? 
+    // bug; incorrent values are being read in. Issue with unsigned char types? 
 
     ifstream infile(settings);
     ifstream playersIn(playerFile);
@@ -46,6 +46,7 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
     // Need to get UC step requirement. 
     infile >> stepRequirements_[9];
     infile >> dropLeague;
+    infile >> maxMultiplier_;
     goldStepRules_[9] = 255;
     queue_ = new HashQueue(players_);
     mt19937 rng_(seed);
@@ -58,7 +59,7 @@ Simulation::~Simulation()
     delete queue_;
 }
 
-float Simulation::runSimulation(size_t numBattles){
+float Simulation::nBattlesSimulation(size_t numBattles){
     size_t battlesPlayed = 0;
     uniform_real_distribution<double> doubleDist(0, 1);
     uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
@@ -97,7 +98,7 @@ float Simulation::runSimulation(size_t numBattles){
     return ultChamps_ / float(numPlayers_);    
 }
 
-size_t runSimulation(float ultPct){
+size_t ucPctSimulation(float ultPct){
     
     return ultPct;
 }

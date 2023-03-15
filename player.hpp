@@ -21,7 +21,9 @@
 class Player
 {
 private:
+
     size_t id_;
+    // Percent of games that are not PoL ranked games. 
     float partyPct_; 
     short wins_;
     short losses_;
@@ -31,14 +33,17 @@ private:
     u_int8_t cardLevel_;
     u_int8_t league_;
     u_int8_t multiplier_;
+    // Remaining wins to gold step in current league
     u_int8_t winsToGold_;
+    // Current gold step player can't fall below
     u_int8_t currentGold_;
     bool ultChamp_;
 
 public:
     // constructors and destructors
     Player() = delete; // default constructor
-    Player(size_t id, float partyPct, short oldPB, u_int8_t kingTower, u_int8_t cardLevel, u_int8_t winsToGold);
+    Player(size_t id, float partyPct, short oldPB, u_int8_t kingTower, 
+            u_int8_t cardLevel, u_int8_t winsToGold);
     Player(const Player &other) = default; // copy constructor
     ~Player() = default;
     Player &operator=(const Player &other);
@@ -65,6 +70,7 @@ public:
      * @param nextToGold Steps to gold step in the next league
      * @param nextLeague number of steps required for the next league
      * @param dropLeague If there is golden steps at the end of each league
+     * @note Potential bug if the player skips a full league and wins/gold step is incorrect
      */
     void playMatch(Player& other, double randomVal, u_int8_t curToGold,
                          u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague);
@@ -80,10 +86,23 @@ public:
     void winsMatch(Player &other, u_int8_t curToGold, u_int8_t nextToGold,
                      u_int8_t nextLeague, bool dropleague);
 
+    /**
+     * @brief Checks if match is allowed. Function is never called...
+     * 
+     * @param other Player to match against
+     * @return true Valid match
+     * @return false Invalid match
+     */
     bool matchAllowed(Player& other) const;
 
-
-    void reset(u_int8_t finishLeague);
+    /**
+     * @brief Resets a player to league 1. Reset W/L? P
+     * 
+     * @param finishLeague League that the player finished the season in
+     * @param maxMultplier The win multiplier for next season
+     * @param winsToGold Wins to gold for the starting league. 
+     */
+    void reset(u_int8_t finishLeague, u_int8_t maxMultiplier, u_int8_t winsToGold);
 
     /**
      * @brief Checks if 2 players are identical
@@ -97,9 +116,10 @@ public:
     bool operator!=(const Player& other) const;
 
     /**
-     * @brief prints out the player
+     * @brief prints out the player.  
      * 
      * @param out ostream to modify
+     * @note Will be changed after debugging to print wins and winPct for data analysis
      */
     void printToStream(std::ostream& out) const;
 };
