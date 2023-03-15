@@ -15,12 +15,13 @@ private:
     std::vector<Player> players_;
     u_int8_t goldStepRules_[10];
     u_int8_t stepRequirements_[10];
-    size_t ultChamps_;
+    size_t ultChamps_ = 0;
     size_t numPlayers_;
     HashQueue* queue_;
     size_t seed_;
     u_int8_t maxMultiplier_;
     bool dropLeague_;
+    std::ofstream outStream;
 
 public:
 

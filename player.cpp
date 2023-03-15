@@ -9,7 +9,7 @@ using namespace std;
 Player::Player(size_t id, float partyPct, short oldPB, 
                 u_int8_t kingTower, u_int8_t cardLevel, u_int8_t winsToGold):
     id_{id}, partyPct_{partyPct}, wins_{0}, losses_{0}, oldPB_{oldPB}, step_{0},
-    kingTower_{kingTower}, cardLevel_{cardLevel},league_{0}, multiplier_{0},
+    kingTower_{kingTower}, cardLevel_{cardLevel},league_{0}, multiplier_{1},
     winsToGold_{winsToGold}, currentGold_{0}, ultChamp_{false}
     {
         //nothing to do here
@@ -77,7 +77,7 @@ bool Player::matchAllowed(Player& other) const {
 }
 void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
                          u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague){
-    cout << "playing match" << endl;
+    // cout << "playing match" << endl;
     short pbDiff = abs(oldPB_ - other.oldPB_);
     long double higherPBwins = -0.0000001097213 * pbDiff * pbDiff + 0.00030971 * pbDiff + 0.48544;
 
@@ -85,13 +85,13 @@ void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
     // Assume that low levels wrapped up in low old pb
     if ((oldPB_ > other.oldPB_ and randomVal < higherPBwins) or (oldPB_ < other.oldPB_ and randomVal > higherPBwins)){ 
         // ^ player is higher pb and higher pb wins^^        ^ player is lower pb and higher pb loses
-        cout << "player 1 wins" << endl;
+        // cout << "player 1 wins" << endl;
         winsMatch(other, curToGold, nextToGold, nextLeague, dropLeague);
         if (league_ == 9){
             ultChamp_ = true;
         }
     } else {
-        cout << "player2 wins" << endl;
+        // cout << "player2 wins" << endl;
         other.winsMatch(*this, curToGold, nextToGold, nextLeague, dropLeague);
     }    
 }
@@ -111,7 +111,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
         if (!dropLeague){
             currentGold_ = step_;
         }
-    } else if (winsToGold_ == 0) {
+    } else if (winsToGold_ == 1) {
         // "next" win is a golden step
         currentGold_ = step_; // make next step gold
         winsToGold_ = curToGold; // reset wins req'd to get next golden step
@@ -122,7 +122,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     } // No gold steps, no new league, just increase step count
 
     // Handle losing player case
-    if (other.step_ != currentGold_){
+    if (other.step_ != other.currentGold_){
         --other.step_;
     }
     ++wins_;
@@ -131,7 +131,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
 }
 
 void Player::printToStream(ostream& out) const {
-    out << "(" << id_ << ", " << int(league_) << ", " << int(winsToGold_) << ", " << int(currentGold_) << ", " << int(step_) << ")";
+    out << "(" << id_ << ", " << int(wins_) << ", " << int(league_) << ", " << int(winsToGold_) << ", " << int(currentGold_) << ", " << int(step_) << ")";
 }
 
 ostream& operator<<(ostream& outStream, const Player& p){

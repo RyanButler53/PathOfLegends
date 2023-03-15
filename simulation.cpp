@@ -51,8 +51,7 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
     goldStepRules_[9] = 255;
     queue_ = new HashQueue(players_);
     mt19937 rng_(seed);
-    // uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
-
+    outStream = ofstream(outputFile + ".results");
 }
 
 Simulation::~Simulation()
@@ -61,40 +60,32 @@ Simulation::~Simulation()
 }
 
 float Simulation::nBattlesSimulation(size_t numBattles){
-    cout << players_.size() << endl;
-    for (auto& p : players_){
-        cout << p << " " << std::flush;
-    }
-    cout << endl;
     size_t battlesPlayed = 0;
     uniform_real_distribution<double> doubleDist(0, 1);
     uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
-    cout << "initial queue: " << *queue_ << endl;
+    cout << "(id, wins, league, winsToGold, currentGold, step)" << endl;
     while (battlesPlayed < numBattles)
     {
         size_t p1 = playerDist(rng_);
         size_t opponent = queue_->findOpponent(p1);
-        cout << p1 << " " << opponent << endl;
-        cout << "Queue status: " << *queue_ << endl;
+        // cout << "Queue status: " << *queue_ << endl;
         if (opponent != numPlayers_)// and doubleDist(rng_) > players_[p1].getPartyPct())
         {
             //play battle
-            cout << "playing a battle" << endl;
+            // cout << "playing a battle" << endl;
             double randomVal = doubleDist(rng_);
-            cout << p1 << endl;
-            cout << players_.size() << endl;
-            cout << players_[p1] << endl;
+            // cout << p1 << endl;
+            // cout << players_.size() << endl;
+            // cout << players_[p1] << endl;
             u_int8_t league = players_[p1].getLeague();
             u_int8_t curToGold = 0;
-            cout << "playing match" << endl;
-            cout << goldStepRules_[league] << " " << std::flush
-            << goldStepRules_[league + 1] << " "
-            << stepRequirements_[league + 1];
+            cout << players_[p1] << " vs " << players_[opponent] << "-> ";
             players_[p1].playMatch(players_[opponent], randomVal,
                                    goldStepRules_[league], goldStepRules_[league + 1],
                                    stepRequirements_[league + 1], dropLeague_);
-            ++numBattles;
+            ++battlesPlayed;
             cout << players_[p1] << " vs " << players_[opponent] << endl;
+
         }
     // count number of ultimate champs
     }
@@ -102,8 +93,10 @@ float Simulation::nBattlesSimulation(size_t numBattles){
         if (p.isUC()){
             ++ultChamps_;
         }
+        outStream << p << endl;
     }
-    return ultChamps_ / float(numPlayers_);    
+    outStream << endl;
+    return ultChamps_ / float(numPlayers_);
 }
 
 size_t ucPctSimulation(float ultPct){

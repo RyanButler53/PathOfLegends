@@ -10,10 +10,9 @@ Simulator for the Path of Legends
  
 ### Development
  
- - Known issue with reading in unisigned chars. 
- - Finish small run through of the program. 
- - Make better way of finding when there is a new UC to implement second version of simulation that goes until $x\%$ are in UC. 
- - Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
+- Fix issue with players matching with different leagues
+- Make better way of finding when there is a new UC to implement second version of simulation that goes until $x\%$ are in UC. 
+- Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
  	- Allows for multipliers that let players skip entire leagues with a single win (Do we really want this???)
 - Output: Sim that takes in UC pct used to calculate how many battles needed. Sim that takes in number of battles lets us experiment on parameters for the sytem. 
 - For data analysis, having option to print all players to tsv file may be very useful (Can change `<<` operator in player class from `" "` to `\tsv`). 

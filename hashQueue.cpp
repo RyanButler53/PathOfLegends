@@ -17,19 +17,16 @@ HashQueue::~HashQueue(){
 
 size_t HashQueue::findOpponent(size_t playerInd){
     u_int8_t league = playerVec_[playerInd].getLeague();
-    cout << "finding opponent for " << playerVec_[playerInd] <<  "in league: " << int(league) << endl;
     if (league == 9)
     {
         return numPlayers;
     } else if (queue_[league] != numPlayers and queue_[league] != playerInd) {
         size_t oppIndex = queue_[league];
         // Reset queue
-        cout << "Opponent found. Matching with index " << oppIndex << endl;
         queue_[league] = numPlayers;
         return oppIndex;
     } else {
         // Add to queue
-        cout << "no opponent found. Addng " << playerInd << " to queue in league " << int(league) << endl;
         queue_[league] = playerInd;
         return numPlayers;
     }
