@@ -70,10 +70,12 @@ public:
      * @param nextToGold Steps to gold step in the next league
      * @param nextLeague number of steps required for the next league
      * @param dropLeague If there is golden steps at the end of each league
+     * @param newUC If the winner is a new UC player, change to true. 
      * @note Potential bug if the player skips a full league and wins/gold step is incorrect
      */
     void playMatch(Player& other, double randomVal, u_int8_t curToGold,
-                         u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague);
+                         u_int8_t nextToGold, u_int8_t nextLeague, 
+                         bool dropLeague, bool& newUC);
 
     /**
      * @brief updates players when a match is played
@@ -82,6 +84,8 @@ public:
      * @param curToGold number of wins for a golden step in this league
      * @param nextToGold number of wins for gold in next league
      * @param nextLeague number of steps required for next league
+     * @param dropLeague If golden steps are at the bottom of each league
+     * 
      */
     void winsMatch(Player &other, u_int8_t curToGold, u_int8_t nextToGold,
                      u_int8_t nextLeague, bool dropleague);
@@ -102,7 +106,7 @@ public:
      * @param maxMultplier The win multiplier for next season
      * @param winsToGold Wins to gold for the starting league. 
      */
-    void reset(u_int8_t finishLeague, u_int8_t maxMultiplier, u_int8_t winsToGold);
+    void reset(u_int8_t maxMultiplier, u_int8_t winsToGold);
 
     /**
      * @brief Checks if 2 players are identical

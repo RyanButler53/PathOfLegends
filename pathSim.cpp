@@ -2,8 +2,8 @@
 #include "simulation.hpp"
 using namespace std;
 
-#define NUM_BATTLES 10 //update this.
-#define NUM_PLAYERS 5 // Kept small for testing. 
+#define NUM_BATTLES 50000000
+#define NUM_PLAYERS 500000
 
 // Test command:  ./pathSim -p small.txt -o test -i settings.txt -d 70
 

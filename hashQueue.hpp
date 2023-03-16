@@ -6,14 +6,14 @@
 
 class HashQueue {
     private:
-        std::vector<Player> playerVec_;
+        std::vector<Player*> playerVec_;
         // Queue array stores index in playerVec
         size_t* queue_;
         size_t numPlayers;
 
     public:
         HashQueue() = delete;
-        HashQueue(std::vector<Player> &players);
+        HashQueue(std::vector<Player*>& players);
         HashQueue(const HashQueue &h) = delete;
         HashQueue& operator=(const HashQueue& h) = delete;
         
@@ -32,7 +32,6 @@ class HashQueue {
 
         /**
          * @brief Perform season reset. Empty the queue. 
-         * @
          */
         void reset();
 

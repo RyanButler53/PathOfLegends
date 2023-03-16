@@ -51,13 +51,16 @@ bool Player::isUC(){
     return ultChamp_;
 }
 
-void Player::reset(u_int8_t finishLeague, u_int8_t maxMultiplier, u_int8_t winsToGold){
+void Player::reset(u_int8_t maxMultiplier, u_int8_t winsToGold) {
     ultChamp_ = false;
-    multiplier_ = min(finishLeague, maxMultiplier);
+    u_int8_t mult = league_ + 1;
+    multiplier_ = min(mult, maxMultiplier);
     wins_ = 0;
     step_ = 0;
     losses_ = 0;
     winsToGold_ = winsToGold;
+    league_ = 0;
+    currentGold_ = 0;
 }
 
 bool  Player::operator==(const Player& other) const {
@@ -76,7 +79,7 @@ bool Player::matchAllowed(Player& other) const {
     return league_ == other.league_;
 }
 void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
-                         u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague){
+                         u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague, bool& newUC){
     // cout << "playing match" << endl;
     short pbDiff = abs(oldPB_ - other.oldPB_);
     long double higherPBwins = -0.0000001097213 * pbDiff * pbDiff + 0.00030971 * pbDiff + 0.48544;
@@ -89,10 +92,15 @@ void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
         winsMatch(other, curToGold, nextToGold, nextLeague, dropLeague);
         if (league_ == 9){
             ultChamp_ = true;
+            newUC = true;
         }
     } else {
         // cout << "player2 wins" << endl;
         other.winsMatch(*this, curToGold, nextToGold, nextLeague, dropLeague);
+        if (other.league_ == 9){
+            other.ultChamp_ = true;
+            newUC = true;
+        }
     }    
 }
 void Player::winsMatch(Player& other,  u_int8_t curToGold,
@@ -104,7 +112,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     }
     
     // Reach new league, refresh golden steps
-    if (step_ == nextLeague){
+    if (step_ >= nextLeague){
         ++league_;
         winsToGold_ = nextToGold;
         // Reaching new league, if can't drop league, make current step gold
@@ -131,7 +139,9 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
 }
 
 void Player::printToStream(ostream& out) const {
-    out << "(" << id_ << ", " << int(wins_) << ", " << int(league_) << ", " << int(winsToGold_) << ", " << int(currentGold_) << ", " << int(step_) << ")";
+    // debugging player
+    // out << "(" << id_ << ", " << int(wins_) << ", " << int(league_) << ", " << int(winsToGold_) << ", " << int(currentGold_) << ", " << int(step_) << ")";
+    out << id_ << ", " << int(wins_) << ", " << int(losses_) << ", "<< int(league_) << ", " << int(step_);
 }
 
 ostream& operator<<(ostream& outStream, const Player& p){

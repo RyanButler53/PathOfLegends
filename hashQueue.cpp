@@ -2,7 +2,7 @@
 #include "hashQueue.hpp"
 using namespace std;
 
-HashQueue::HashQueue(vector<Player> &players):
+HashQueue::HashQueue(vector<Player*>& players):
         queue_{new size_t[9]},
         playerVec_{players},
         numPlayers{players.size()} {
@@ -16,23 +16,18 @@ HashQueue::~HashQueue(){
 }
 
 size_t HashQueue::findOpponent(size_t playerInd){
-    u_int8_t league = playerVec_[playerInd].getLeague();
-    cout << "Player League: " << int(league) << " " << playerVec_[playerInd] << endl;
-    if (league == 9)
-    {
+    u_int8_t league = playerVec_[playerInd]->getLeague();
+    // cout << "Player League: " << int(league) << " " << *playerVec_[playerInd] << endl;
+    if (league == 9) {
         return numPlayers;
     //          Empty spot in queue             Player doesn't match against themself
-    }
-    else if (queue_[league] != numPlayers and queue_[league] != playerInd)
-    {
+    } else if (queue_[league] != numPlayers and queue_[league] != playerInd) {
         size_t oppIndex = queue_[league];
-        cout << playerVec_[playerInd] << " " << playerVec_[oppIndex] << " " << flush;
+        // cout << *playerVec_[playerInd] << " " << *playerVec_[oppIndex] << " " << flush;
         // Reset queue
         queue_[league] = numPlayers;
         return oppIndex;
-    }
-    else
-    {
+    } else {
         // Add to queue
         queue_[league] = playerInd;
         return numPlayers;

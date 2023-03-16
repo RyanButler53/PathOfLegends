@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = --std=c++2a -g -Wextra -pedantic #-O3
+CXXFLAGS = --std=c++2a -g -Wextra -pedantic -O3
 
 TARGET = pathSim
 

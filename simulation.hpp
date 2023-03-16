@@ -6,13 +6,14 @@
 #include <ostream>
 #include <fstream>
 #include <string>
+#include <chrono>
 #include <random> 
 
 class Simulation
 {
 private:
     std::mt19937 rng_;
-    std::vector<Player> players_;
+    std::vector<Player*> players_;
     u_int8_t goldStepRules_[10];
     u_int8_t stepRequirements_[10];
     size_t ultChamps_ = 0;
@@ -21,7 +22,7 @@ private:
     size_t seed_;
     u_int8_t maxMultiplier_;
     bool dropLeague_;
-    std::ofstream outStream;
+    std::ofstream outStream_;
 
 public:
 
@@ -45,6 +46,18 @@ public:
      * @return float Percentage of players in UC. 
      */
     float nBattlesSimulation(size_t numBattles);
+
+    /**
+     * @brief Resets all players
+     * 
+     */
+    void seasonReset();
+
+    /**
+     * @brief Prints all players to the outstream_
+     * 
+     */
+    void printAllPlayers();
 };
 
 #endif
