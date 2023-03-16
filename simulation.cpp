@@ -69,10 +69,13 @@ float Simulation::nBattlesSimulation(size_t numBattles){
         size_t p1 = playerDist(rng_);
         size_t opponent = queue_->findOpponent(p1);
         // cout << "Queue status: " << *queue_ << endl;
+        cout << *queue_ << " (opponent:  " << opponent << ")" << endl;
         if (opponent != numPlayers_)// and doubleDist(rng_) > players_[p1].getPartyPct())
         {
-            //play battle
-            // cout << "playing a battle" << endl;
+            cout << players_[p1] << players_[opponent] << endl;
+            cout << "league check: " << (players_[p1].getLeague() == players_[opponent].getLeague()) << endl;
+            // play battle
+            //  cout << "playing a battle" << endl;
             double randomVal = doubleDist(rng_);
             // cout << p1 << endl;
             // cout << players_.size() << endl;

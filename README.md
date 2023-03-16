@@ -11,6 +11,7 @@ Simulator for the Path of Legends
 ### Development
  
 - Fix issue with players matching with different leagues
+	- Issue is with hashqueue players not updating when simulation players do. Try passing in a ptr to the players. 
 - Make better way of finding when there is a new UC to implement second version of simulation that goes until $x\%$ are in UC. 
 - Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
  	- Allows for multipliers that let players skip entire leagues with a single win (Do we really want this???)

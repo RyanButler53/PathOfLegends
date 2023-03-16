@@ -2,7 +2,7 @@
 #include "simulation.hpp"
 using namespace std;
 
-#define NUM_BATTLES 100 //update this.
+#define NUM_BATTLES 10 //update this.
 #define NUM_PLAYERS 5 // Kept small for testing. 
 
 // Test command:  ./pathSim -p small.txt -o test -i settings.txt -d 70
