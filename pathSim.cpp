@@ -3,15 +3,16 @@
 #include <thread>
 using namespace std;
 
-#define NUM_BATTLES 50000000
+#define NUM_BATTLES 51941881
 #define NUM_PLAYERS 500000
-#define ULT_CHAMP_PCT 0.005f // 0.5% is reasonable UC pct
+#define ULT_CHAMP_PCT 0.01f // 0.5-1% is reasonable UC pct
 
 // Test command:  ./pathSim -p small.txt -o test -i settings.txt -d 70
 
-void printCompilerCommands(); 
+void printCompilerCommands();
+// void runSim(string &settings, string playerfile, size_t seed, string outputname);
 
-int main(int argc, const char **argv) {
+int main(int argc, const char **argv){
     string playerFile = "small.txt";
     string settingsFile = "settings";
     string outputPrefix = "simulation";
@@ -19,7 +20,7 @@ int main(int argc, const char **argv) {
     size_t maxThreads = 1;
 
     // Process command line arguments. 
-    vector<string> args(argv + 1, argc + argv);
+    vector<string> args(argv + 1, argv + argc);
     for (size_t i = 0; i < args.size(); ++i){
         string arg = args[i];
         if (arg == "-h"){
@@ -37,19 +38,35 @@ int main(int argc, const char **argv) {
         }else if (arg == "-d"){
             ++i;
             seed = stoi(args[i]);
-        } else if (arg == "-m"){
+        }
+        else if (arg == "-m") {
             ++i;
             maxThreads = min(stoi(args[i]), 8); // max of 8 threads used
         }
     }
+    // vector<thread> simThreads;
+    // cout << "max threads:  " << maxThreads << endl;
+    // for (size_t sim = 0; sim < maxThreads; ++sim) {
+    //     cout << "sim " << sim << endl;
+    //     string outputFile = outputPrefix + "." + to_string(sim);
+    //     std::thread t(runSim, ref(settingsFile), playerFile, sim, outputFile);
+        
+    //     simThreads.push_back(std::move(t));
+    // }
+    // for (thread& t: simThreads){
+    //     t.join();
+    // }
+    
     Simulation pathSim{settingsFile, playerFile, seed, NUM_PLAYERS, outputPrefix};
-    // float result = pathSim.nBattlesSimulation(NUM_BATTLES);
-    size_t result = pathSim.ucPctSimulation(ULT_CHAMP_PCT);
-    cout << result << endl;
+    float result = pathSim.nBattlesSimulation(NUM_BATTLES);
+    // size_t result = pathSim.ucPctSimulation(ULT_CHAMP_PCT);
+    cout << result << endl;  
     return 0;
 }
 
-// void runSim(int& dummy, Simulation* s){
+// void runSim(string& settings, string playerfile, size_t seed, string outputname ){
+//     Simulation s{settings, playerfile, seed, NUM_PLAYERS, outputname};
+//     s.ucPctSimulation(ULT_CHAMP_PCT);
 //     return;
 // }
 

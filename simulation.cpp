@@ -13,6 +13,7 @@ using namespace std;
 
 Simulation::Simulation(string settings, string playerFile, size_t seed, size_t numPlayers, string outputPrefix){
     numPlayers_ = numPlayers;
+    seed_ = seed;
     unsigned kt, cl;
     short oldPB;
     float partyPct;
@@ -50,10 +51,10 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
     infile >> mult;
     goldStepRules_[9] = 255;
     queue_ = new HashQueue(players_);
-    mt19937 rng_(seed);
+    rng_ = mt19937(seed_);
     outStream_ = ofstream(outputPrefix+".results");
     maxMultiplier_ = mult;
-    configOut << "Seed: " << seed << "\n"
+    configOut << "Seed: " << seed_ << "\n"
               << "Player file: " << playerFile << "\n"
               << "Number of Players: " << numPlayers_ << "\n"
               << "Steps Per Golden Step: ";
@@ -77,23 +78,27 @@ Simulation::~Simulation()
     }
 }
 
-float Simulation::nBattlesSimulation(size_t numBattles){
+float Simulation::nBattlesSimulation(size_t numBattles){ 
     uniform_real_distribution<double> doubleDist(0, 1);
     uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
     // Running 4 seasons to get effect of multiplier
-    for (size_t season = 0; season < 5; ++season){
+    for (size_t season = 0; season < 5; ++season)
+    {
         seasonReset();
         ultChamps_ = 0;
         size_t battlesPlayed = 0;
         auto seasonStart = chrono::high_resolution_clock::now();
-        while (battlesPlayed < numBattles) {
+        while (battlesPlayed < numBattles)
+        {
             playBattle(doubleDist, playerDist, battlesPlayed);
         }
         auto curTime = chrono::high_resolution_clock::now();
-        std::cout << "Season " << season << " complete with " << ultChamps_ << " Ultimate Champs" << "\n";
+        std::cout << "Season " << season << " complete with " << ultChamps_ << " Ultimate Champs"
+                  << "\n";
         chrono::duration<double> timeSoFar = curTime - seasonStart;
-        std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n" <<  endl;
-    }
+        std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n"
+                  << endl;
+        }
     // Print players after 5 seasons
     printAllPlayers();
     return ultChamps_ / float(numPlayers_);
@@ -114,7 +119,6 @@ void  Simulation::playBattle(uniform_real_distribution<double>& doubleDist,
                                     stepRequirements_[league + 1], dropLeague_, newUC);
             ultChamps_ += newUC;
             ++battlesPlayed;
-
             // Infinite loop case. full queue, all others in UC. Very rare
             if (ultChamps_ == (numPlayers_ - 9)) {
                 std::cout << "Max ultimate champs reached in " << battlesPlayed << " battles" << endl;
@@ -124,7 +128,6 @@ void  Simulation::playBattle(uniform_real_distribution<double>& doubleDist,
 
 size_t Simulation::ucPctSimulation(float ultPct){
     size_t battlesPlayed = 0;
-
     size_t ultChampsRequired = ultPct * numPlayers_;
     uniform_real_distribution<double> doubleDist(0, 1);
     uniform_int_distribution<size_t> playerDist(0, numPlayers_ - 1);
@@ -132,16 +135,15 @@ size_t Simulation::ucPctSimulation(float ultPct){
         seasonReset();
         battlesPlayed = 0;
         ultChamps_ = 0;
-        auto seasonStart = chrono::high_resolution_clock::now();
+        // auto seasonStart = chrono::high_resolution_clock::now();
         while (ultChamps_ < ultChampsRequired) {
             playBattle(doubleDist, playerDist, battlesPlayed);
         }
         auto curTime = chrono::high_resolution_clock::now();
-        std::cout << "Season " << season << " complete in " << battlesPlayed << " battles played" << "\n";
-        chrono::duration<double> timeSoFar = curTime - seasonStart;
-        std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n" <<  endl;
+        // std::cout << "Season " << season << " complete in " << battlesPlayed << " battles played" << "\n";
+        // chrono::duration<double> timeSoFar = curTime - seasonStart;
+        // std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n" <<  endl;
     }
-    outStream_ << battlesPlayed << endl;
     return battlesPlayed; // returns the number of battles for the LAST SEASON
 }
 
