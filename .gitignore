@@ -36,3 +36,4 @@ pathSim
 # small.txt
 500k.txt
 *.results
+*.cfg

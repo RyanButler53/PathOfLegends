@@ -1,9 +1,11 @@
 #include <iostream>
 #include "simulation.hpp"
+#include <thread>
 using namespace std;
 
 #define NUM_BATTLES 50000000
 #define NUM_PLAYERS 500000
+#define ULT_CHAMP_PCT 0.005f // 0.5% is reasonable UC pct
 
 // Test command:  ./pathSim -p small.txt -o test -i settings.txt -d 70
 
@@ -14,7 +16,7 @@ int main(int argc, const char **argv) {
     string settingsFile = "settings";
     string outputPrefix = "simulation";
     size_t seed = 70;
-
+    size_t maxThreads = 1;
 
     // Process command line arguments. 
     vector<string> args(argv + 1, argc + argv);
@@ -35,13 +37,21 @@ int main(int argc, const char **argv) {
         }else if (arg == "-d"){
             ++i;
             seed = stoi(args[i]);
+        } else if (arg == "-m"){
+            ++i;
+            maxThreads = min(stoi(args[i]), 8); // max of 8 threads used
         }
     }
-    Simulation pathSim{settingsFile, playerFile, seed, NUM_PLAYERS, outputPrefix + ".results"};
-    float result = pathSim.nBattlesSimulation(NUM_BATTLES);
+    Simulation pathSim{settingsFile, playerFile, seed, NUM_PLAYERS, outputPrefix};
+    // float result = pathSim.nBattlesSimulation(NUM_BATTLES);
+    size_t result = pathSim.ucPctSimulation(ULT_CHAMP_PCT);
     cout << result << endl;
     return 0;
 }
+
+// void runSim(int& dummy, Simulation* s){
+//     return;
+// }
 
 void printCompilerCommands(){
     cout << "Compiler Flags: \n" << endl;
@@ -57,4 +67,6 @@ void printCompilerCommands(){
     cout << "   Default: /ladderSample/25k.txt" << endl;
     cout << "-d SEED: Seed for RNG." << endl;
     cout << "    Default: 70" << endl;
+    cout << "-m MAX_THREADS: Maximum number of threads for multithreading." << endl;
+    cout << "   Default: 1, no multithreading. Max threads allowed is 8. Each thread will have a different seed" << endl;
 }

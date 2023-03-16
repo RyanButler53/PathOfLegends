@@ -12,7 +12,7 @@ Simulator for the Path of Legends
 
 - Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
  	- Allows for multipliers that let players skip entire leagues with a single win (Do we really want this???)
-- Output: Sim that takes in UC pct used to calculate how many battles needed. Sim that takes in number of battles lets us experiment on parameters for the sytem. 
+ 	- Multithreading! Running 5 simulations in parallel seems very useful. Output goes to a separate file, so no mutex, no race conditions. Reading from the player file is concurrent and safe. 
 
 ### Experiments
 - Find out how many battles are played to get a 1% UC

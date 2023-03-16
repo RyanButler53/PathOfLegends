@@ -48,14 +48,22 @@ public:
     float nBattlesSimulation(size_t numBattles);
 
     /**
-     * @brief Resets all players
+     * @brief Plays a battle. Used to eliminate code duplication. 
      * 
+     * @param doubleDist 
+     * @param playerDist 
      */
-    void seasonReset();
+    void playBattle(std::uniform_real_distribution<double>& doubleDist, 
+                    std::uniform_int_distribution<size_t>& playerDist, size_t& battlesPlayed);
 
     /**
+     * @brief Resets all players
+     *
+     */
+    void seasonReset();
+    /**
      * @brief Prints all players to the outstream_
-     * 
+     *
      */
     void printAllPlayers();
 };
