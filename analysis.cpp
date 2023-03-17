@@ -22,7 +22,6 @@ template <typename T>
 double variance(std::vector<T> const &v, float avg){
     double var = 0.0;
     if (v.size() == 0){
-        cout << "empty vec" << endl;
         return 0.0;
     }
     for (auto& value : v){

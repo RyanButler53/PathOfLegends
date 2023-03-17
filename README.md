@@ -11,11 +11,12 @@ Simulator for the Path of Legends
 ### Development
 
 - Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
- 	- Allows for multipliers that let players skip entire leagues with a single win (Do we really want this???)
- 	- Multithreading! Running 5 simulations in parallel seems very useful. Output goes to a separate file, so no mutex, no race conditions. Reading from the player file is concurrent and safe. 
+ 	- Allows for multipliers that let players skip entire leagues with a single win 
+	- THIS IS REALLY IMPORTANT! ALLOWS FOR DROPPING LEAGUES TO PROPERLY HAVE LEAGUE BENCHMARKS
 
 ### Experiments
 - Find out how many battles are played to get a 1% UC
+- Solved. Roughly 51 million. 
 - Experiment with shortening the path and cutting down golden stps
 	- 5-10 trials of 3-4 settings sims, probably on 10% scale: 
 	- Path Length: 60,  no gold steps in leagues
@@ -26,12 +27,13 @@ Simulator for the Path of Legends
 	- W/L ratio (overall, cannot adhere to master 1+ counts rule with league dropping allowed)
 	- count of UC players. 
 
+Command to run experiments from a path configuration `pathSettings.txt`in samplePath folder is
+`sh experiment.sh pathSettings`. 
+Will do the experiment, conduct the analysis, send analysis results to summary in `/data/summary` folder and put a graph in the graphs folder
+
 ### Data Analysis
 
-- Avg and Stdev of percent UC players
-- Avg/ Stdev of wins required to get to UC. 
-- Avg/Stdev of UC win percent
-- 3-4 plots?
+Found in analysis.cpp
 
 ## Contents of this Repo: 
 

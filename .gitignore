@@ -32,8 +32,9 @@
 *.app
 pathSim
 
-# Data and Results
+# Data, Results, Graphs
 # small.txt
 500k.txt
 *.results
 *.cfg
+*.png
