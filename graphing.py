@@ -13,7 +13,7 @@ filebase = args.data
 fnames = [filebase +"."+ str(trial) + ".results" for trial in range(10)]
 filesL = [open(fname, "r") for fname in fnames]
 allWinPcts, UCwinPcts, allLeagues, allsteps, UCGamesPlayed = [],[], [], [], []
-for numPlayers in range(500000):
+for numPlayers in range(50000):
     wpAll, wpUC, leagues, steps, gpUC = [],[], [], [], []
     for f in filesL:
         line = f.readline()
@@ -40,7 +40,6 @@ for wp, l, s in zip(allWinPcts, allLeagues, allsteps):
     toAllDf.append([wp, l, s])
 
 df = pd.DataFrame(toAllDf,columns=["Win Pcts",  "Leagues", "Steps"])
-df.head()
 fig, axes = plt.subplots(nrows = 2, ncols = 2, figsize=(10,9))
 
 histColors = matplotlib.cm.get_cmap('viridis', 9)

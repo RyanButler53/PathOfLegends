@@ -114,11 +114,11 @@ void  Simulation::playBattle(uniform_real_distribution<double>& doubleDist,
             u_int8_t league = players_[p1]->getLeague();
             u_int8_t curToGold = 0;
             bool newUC = false;
-            players_[p1]->playMatch(*players_[opponent], randomVal,
-                                    goldStepRules_[league], goldStepRules_[league + 1],
-                                    stepRequirements_[league + 1], dropLeague_, newUC);
+            players_[p1]->playMatch(*players_[opponent], randomVal, goldStepRules_,
+                                    stepRequirements_, dropLeague_, newUC);
             ultChamps_ += newUC;
             ++battlesPlayed;
+            // cout << *players_[p1] << " vs " << *players_[opponent] << endl;
             // Infinite loop case. full queue, all others in UC. Very rare
             if (ultChamps_ == (numPlayers_ - 9)) {
                 std::cout << "Max ultimate champs reached in " << battlesPlayed << " battles" << endl;

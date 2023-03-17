@@ -72,15 +72,14 @@ bool Player::operator!=(const Player& other) const {
 }
 
 bool Player::matchAllowed(Player& other) const {
-    // Can only play players in their league
+    // Can only play other players in their league
     if (*this == other){ //same player
         return false;
     }
     return league_ == other.league_;
 }
-void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
-                         u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague, bool& newUC){
-    // cout << "playing match" << endl;
+void Player::playMatch(Player& other, double randomVal, u_int8_t* goldStepRules,
+                        u_int8_t* leagueReqs, bool dropLeague, bool& newUC){
     short pbDiff = abs(oldPB_ - other.oldPB_);
     long double higherPBwins = -0.0000001097213 * pbDiff * pbDiff + 0.00030971 * pbDiff + 0.48544;
 
@@ -89,22 +88,22 @@ void Player::playMatch(Player& other, double randomVal, u_int8_t curToGold,
     if ((oldPB_ > other.oldPB_ and randomVal < higherPBwins) or (oldPB_ < other.oldPB_ and randomVal > higherPBwins)){ 
         // ^ player is higher pb and higher pb wins^^        ^ player is lower pb and higher pb loses
         // cout << "player 1 wins" << endl;
-        winsMatch(other, curToGold, nextToGold, nextLeague, dropLeague);
+        winsMatch(other, goldStepRules, leagueReqs, dropLeague);
         if (league_ == 9){
             ultChamp_ = true;
             newUC = true;
         }
     } else {
         // cout << "player2 wins" << endl;
-        other.winsMatch(*this, curToGold, nextToGold, nextLeague, dropLeague);
+        other.winsMatch(*this, goldStepRules, leagueReqs, dropLeague);
         if (other.league_ == 9){
             other.ultChamp_ = true;
             newUC = true;
         }
     }    
 }
-void Player::winsMatch(Player& other,  u_int8_t curToGold,
-                     u_int8_t nextToGold, u_int8_t nextLeague, bool dropLeague){
+void Player::winsMatch(Player& other, u_int8_t* goldStepRules,
+                     u_int8_t* leagueReqs,  bool dropLeague){
     // Handle winner
     step_ += multiplier_;
     if (multiplier_ > 1){
@@ -112,9 +111,10 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     }
     
     // Reach new league, refresh golden steps
-    if (step_ >= nextLeague){
+    if (step_ >= leagueReqs[league_+1]){
         ++league_;
-        winsToGold_ = nextToGold;
+        winsToGold_ = goldStepRules[league_];
+
         // Reaching new league, if can't drop league, make current step gold
         if (!dropLeague){
             currentGold_ = step_;
@@ -122,7 +122,7 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     } else if (winsToGold_ == 1) {
         // "next" win is a golden step
         currentGold_ = step_; // make next step gold
-        winsToGold_ = curToGold; // reset wins req'd to get next golden step
+        winsToGold_ = goldStepRules[league_]; // reset wins req'd to get next golden step
 
         // If there are gold steps in the league, reduce steps to golden step
     } else if (winsToGold_ != 255) {
@@ -132,6 +132,9 @@ void Player::winsMatch(Player& other,  u_int8_t curToGold,
     // Handle losing player case
     if (other.step_ != other.currentGold_){
         --other.step_;
+    }
+    if (other.step_ < leagueReqs[other.league_]){
+        --other.league_;
     }
     ++wins_;
     ++other.losses_;

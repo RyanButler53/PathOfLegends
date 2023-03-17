@@ -3,7 +3,7 @@
  * @author Nova Light (keymckeyface@gmail.com)
  * @brief Player class that supports a model of a CR ladder player
  * @version 0.1
- * @date 2022-03-11
+ * @date 2023-03-11
  * 
  * @copyright Copyright (c) 2022. MIT lisence
  * 
@@ -73,9 +73,8 @@ public:
      * @param newUC If the winner is a new UC player, change to true. 
      * @note Potential bug if the player skips a full league and wins/gold step is incorrect
      */
-    void playMatch(Player& other, double randomVal, u_int8_t curToGold,
-                         u_int8_t nextToGold, u_int8_t nextLeague, 
-                         bool dropLeague, bool& newUC);
+    void playMatch(Player& other, double randomVal, u_int8_t* goldStepRules,
+                     u_int8_t* leagueReqs, bool dropLeague, bool& newUC);
 
     /**
      * @brief updates players when a match is played
@@ -87,8 +86,8 @@ public:
      * @param dropLeague If golden steps are at the bottom of each league
      * 
      */
-    void winsMatch(Player &other, u_int8_t curToGold, u_int8_t nextToGold,
-                     u_int8_t nextLeague, bool dropleague);
+    void winsMatch(Player &other, u_int8_t* goldStepRules,
+                     u_int8_t* leagueReqs, bool dropleague);
 
     /**
      * @brief Checks if match is allowed. Function is never called...

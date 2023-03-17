@@ -60,7 +60,7 @@ int main(int argc, const char **argv){
     Simulation pathSim{settingsFile, playerFile, seed, NUM_PLAYERS, outputPrefix};
     float result = pathSim.nBattlesSimulation(NUM_BATTLES);
     // size_t result = pathSim.ucPctSimulation(ULT_CHAMP_PCT);
-    cout << result << endl;  
+    // cout << result << endl;  
     return 0;
 }
 
