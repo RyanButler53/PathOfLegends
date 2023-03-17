@@ -87,17 +87,17 @@ float Simulation::nBattlesSimulation(size_t numBattles){
         seasonReset();
         ultChamps_ = 0;
         size_t battlesPlayed = 0;
-        auto seasonStart = chrono::high_resolution_clock::now();
+        // auto seasonStart = chrono::high_resolution_clock::now();
         while (battlesPlayed < numBattles)
         {
             playBattle(doubleDist, playerDist, battlesPlayed);
         }
-        auto curTime = chrono::high_resolution_clock::now();
-        std::cout << "Season " << season << " complete with " << ultChamps_ << " Ultimate Champs"
-                  << "\n";
-        chrono::duration<double> timeSoFar = curTime - seasonStart;
-        std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n"
-                  << endl;
+        // auto curTime = chrono::high_resolution_clock::now();
+        // std::cout << "Season " << season << " complete with " << ultChamps_ << " Ultimate Champs"
+        //           << "\n";
+        // chrono::duration<double> timeSoFar = curTime - seasonStart;
+        // std::cout << "Avg Battles/sec: " << battlesPlayed / timeSoFar.count() << "\n"
+        //           << endl;
         }
     // Print players after 5 seasons
     printAllPlayers();
