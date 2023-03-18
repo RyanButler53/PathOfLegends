@@ -7,16 +7,10 @@ Simulator for the Path of Legends
 - If we remove *all* golden steps, how many steps are needed to ensure 1% of players reaching UC after *x* games?
 
 ## Roadmap:
- 
-### Development
-
-- Change PlayMatch and winsMatch to take in a POINTER to the arrays with league reqs and gold step rules 
- 	- Allows for multipliers that let players skip entire leagues with a single win 
-	- THIS IS REALLY IMPORTANT! ALLOWS FOR DROPPING LEAGUES TO PROPERLY HAVE LEAGUE BENCHMARKS
 
 ### Experiments
 - Find out how many battles are played to get a 1% UC
-- Solved. Roughly 51 million. 
+- Solved. Roughly 62 million. 
 - Experiment with shortening the path and cutting down golden stps
 	- 5-10 trials of 3-4 settings sims, probably on 10% scale: 
 	- Path Length: 60,  no gold steps in leagues
@@ -29,32 +23,27 @@ Simulator for the Path of Legends
 
 Command to run experiments from a path configuration `pathSettings.txt`in samplePath folder is
 `sh experiment.sh pathSettings`. 
-Will do the experiment, conduct the analysis, send analysis results to summary in `/data/summary` folder and put a graph in the graphs folder
 
-### Data Analysis
+Script will: 
 
-Found in analysis.cpp
+- Conduct Experiment (Does 2 lines of output every season for 5 seasons and 'Trial n done' at the end of the trial. Runs 10 trials and puts raw data and config files in `data/rawdata`
+- Conduct an analysis of the data and output the analysis results (avgs and stdevs) in a file in `data/summary`
+- Creates plots of the data and saves to `graphs` folder
+- Opens the graph
 
 ## Contents of this Repo: 
 
 `Player.*pp`: Interface and implementation for the player class.  Mostly just storing data about the player. 
 
-- `id` : Unique identifier for the player 
-- `party pct`: How much a player plays party and not PoL. Maybe not useful for a PoL simulation but I left it anyway. 
-- `oldPB` Legacy PB. How I indicate who wins a match. KT and Card level are less relevant since PoL has level caps. 
-- `league` is the league. Sole factor in matchmaing
-- `step` which step of the path the player is on
-- `multiplier` is the win multiplier
-- `winsToGold` How many more wins are required to get the next gold step. 
-- `currentGold` The current gold step that the player cannot fall below. I have a boolean in the simulation object that says if dropping leagues is allowed. 
-
 `hashQueue.*pp`: Interface and implementation for Hashqueue class. The hash queue is a "hash table" but the hash function is the identity function. The table itself is an array that stores the indices of the players in the mm queue. Constant time to find an opponent.  *This is a significant speed up for a PoL simulatior over the regular ladder simulator which uses a random BST*.
 
 Stores an array of players in queue, a vector of player objects. The interface is just `findOpponent()`, taking in an index in the player vector. If there is an opponent, it returns it. If not, it returns the number of players (a known number in the simulation) and adds the player to the queue. 
 
-`simulation.*pp` Interface and Implementation of the simulation. Constructor reads in a file (this is bugged!) with the parameters for the simulation. The settings file _MUST_ contain 9 pairs of numbers: The minimum number of steps required to reach a league and the frequency of the golden step, separated by a whitespace. `10 3` on the second line means "The second league begins at step 10 and has a golden step every 3 wins". Zero in the steps column means that there are no golden steps.  The number at the bottom is the end of the last league, in the current season, this is 93 steps. The penultimate number is 1 or 0, if dropping leagues is allowed (if the golden step at the begining of each league will be turned on). Last number is the maximum multiplier. Partiulaly useful with investigating shorter paths.  
+`simulation.*pp` Interface and Implementation of the simulation. Constructor reads in a file with the parameters for the simulation. 
 
-Simlation will use randomness to pick a player, try to find an opponent and play a match or add the player to the queue. I am using the *index* of the array of player pointers to pick the player since its simpler and avoid unnecessary copy constructors. 
+### Reading in a Settings file:
+
+The settings file _MUST_ contain 9 pairs of numbers: The minimum number of steps required to reach a league and the frequency of the golden step, separated by a whitespace. `10 3` on the second line means "The second league begins at step 10 and has a golden step every 3 wins". Zero in the steps column means that there are no golden steps.  The number at the bottom is the end of the last league, in the current season, this is 93 steps. The penuultimate number is 1 or 0, if dropping leagues is allowed (if the golden step at the begining of each league will be turned on). Last number is the maximum multiplier. Partiulaly useful with investigating shorter paths.  
 
 `settings.txt` and `shortpath.txt` are testing files for paths. `shortpath` has 35 steps and lots of golden steps. `settings.txt` is the current path. 
 

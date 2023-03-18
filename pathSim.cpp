@@ -3,7 +3,7 @@
 #include <thread>
 using namespace std;
 
-#define NUM_BATTLES 51941881
+#define NUM_BATTLES 62747762
 #define NUM_PLAYERS 500000
 #define ULT_CHAMP_PCT 0.01f // 0.5-1% is reasonable UC pct
 
@@ -60,7 +60,7 @@ int main(int argc, const char **argv){
     Simulation pathSim{settingsFile, playerFile, seed, NUM_PLAYERS, outputPrefix};
     float result = pathSim.nBattlesSimulation(NUM_BATTLES);
     // size_t result = pathSim.ucPctSimulation(ULT_CHAMP_PCT);
-    // cout << result << endl;  
+    cout << result << endl;  
     return 0;
 }
 
@@ -70,7 +70,7 @@ int main(int argc, const char **argv){
 //     return;
 // }
 
-void printCompilerCommands(){
+void printCompilerCommands(){       
     cout << "Compiler Flags: \n" << endl;
     cout << "-h: Prints this help message" << endl;
     cout << "-o OUTPUT-PREFIX: The prefix of the results file. " << endl;

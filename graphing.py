@@ -13,7 +13,7 @@ filebase = args.data
 fnames = [filebase +"."+ str(trial) + ".results" for trial in range(10)]
 filesL = [open(fname, "r") for fname in fnames]
 allWinPcts, UCwinPcts, allLeagues, allsteps, UCGamesPlayed = [],[], [], [], []
-for numPlayers in range(50000):
+for numPlayers in range(500000):
     wpAll, wpUC, leagues, steps, gpUC = [],[], [], [], []
     for f in filesL:
         line = f.readline()
@@ -52,7 +52,7 @@ sns.histplot(ax = axes[0,0], data = df, x = "Win Pcts", hue="Leagues", palette =
 sns.histplot(ax = axes[0,1], data=df, x="Steps", hue = "Leagues", discrete=True, palette=histColors)
 sns.histplot(ax=axes[1,0], data=UCGamesPlayed, discrete=True, color="skyblue")
 sns.histplot(ax=axes[1,1], data = UCwinPcts, color = "mediumturquoise")
-outputFile = re.sub("data", "graphs", filebase)
+outputFile = re.sub("data/rawdata", "graphs", filebase)
 outputFile = re.sub("txt", "png", outputFile)
 
 plt.tight_layout()
