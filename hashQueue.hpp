@@ -6,14 +6,14 @@
 
 class HashQueue {
     private:
-        std::vector<Player*> playerVec_;
+        Player* playerArr_;
         // Queue array stores index in playerVec
         size_t* queue_;
-        size_t numPlayers;
+        size_t numPlayers_;
 
     public:
         HashQueue() = delete;
-        HashQueue(std::vector<Player*>& players);
+        HashQueue(Player* players, size_t numPlayers);
         HashQueue(const HashQueue &h) = delete;
         HashQueue& operator=(const HashQueue& h) = delete;
         

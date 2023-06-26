@@ -2,10 +2,10 @@
 #include "hashQueue.hpp"
 using namespace std;
 
-HashQueue::HashQueue(vector<Player*>& players):
+HashQueue::HashQueue(Player* players, size_t numPlayers):
         queue_{new size_t[9]},
-        playerVec_{players},
-        numPlayers{players.size()} {
+        playerArr_{players},
+        numPlayers_{numPlayers} {
     for (size_t league = 0; league < 9; ++league) {
         queue_[league] = numPlayers;
     }
@@ -16,27 +16,27 @@ HashQueue::~HashQueue(){
 }
 
 size_t HashQueue::findOpponent(size_t playerInd){
-    u_int8_t league = playerVec_[playerInd]->getLeague();
+    u_int8_t league = playerArr_[playerInd].getLeague();
     // cout << "Player League: " << int(league) << " " << *playerVec_[playerInd] << endl;
     if (league == 9) {
-        return numPlayers;
+        return numPlayers_;
     //          Empty spot in queue             Player doesn't match against themself
-    } else if (queue_[league] != numPlayers and queue_[league] != playerInd) {
+    } else if (queue_[league] != numPlayers_ and queue_[league] != playerInd) {
         size_t oppIndex = queue_[league];
         // cout << *playerVec_[playerInd] << " " << *playerVec_[oppIndex] << " " << flush;
         // Reset queue
-        queue_[league] = numPlayers;
+        queue_[league] = numPlayers_;
         return oppIndex;
     } else {
         // Add to queue
         queue_[league] = playerInd;
-        return numPlayers;
+        return numPlayers_;
     }
 }
 
 void HashQueue::reset(){
     for (size_t i = 0; i < 9; ++i){
-        queue_[i] = numPlayers;
+        queue_[i] = numPlayers_;
     }
 }
 

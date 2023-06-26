@@ -35,13 +35,14 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
         }
         goldStepRules_[stepRule] = toGoldStep;
     }
+    playerArr_ = new Player[numPlayers_];
     size_t id = 0;
     for (size_t id = 0; id < numPlayers_; ++id) {
         playersIn >> kt;
         playersIn >> oldPB;
         playersIn >> partyPct;
         playersIn >> cl;
-        players_.push_back(new Player{id, partyPct, oldPB, u_int8_t(kt), u_int8_t(cl), goldStepRules_[0]});
+        playerArr_[id] = Player{id, partyPct, oldPB, u_int8_t(kt), u_int8_t(cl), goldStepRules_[0]};
     }
     // Need to get UC step requirement.
     infile >> stepReq;
@@ -50,7 +51,7 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
     infile >> dropLeague;
     infile >> mult;
     goldStepRules_[9] = 255;
-    queue_ = new HashQueue(players_);
+    queue_ = new HashQueue(playerArr_, numPlayers);
     rng_ = mt19937(seed_);
     outStream_ = ofstream(outputPrefix+".results");
     maxMultiplier_ = mult;
@@ -73,9 +74,7 @@ Simulation::Simulation(string settings, string playerFile, size_t seed, size_t n
 Simulation::~Simulation()
 {
     delete queue_;
-    for (Player* p : players_){
-        delete p;
-    }
+    delete[] playerArr_;
 }
 
 float Simulation::nBattlesSimulation(size_t numBattles){ 
@@ -109,12 +108,12 @@ void  Simulation::playBattle(uniform_real_distribution<double>& doubleDist,
         size_t p1 = playerDist(rng_);
         size_t opponent = queue_->findOpponent(p1);
         // play battle
-        if (opponent != numPlayers_ and doubleDist(rng_) > players_[p1]->getPartyPct()) {
+        if (opponent != numPlayers_ and doubleDist(rng_) > playerArr_[p1].getPartyPct()) {
             double randomVal = doubleDist(rng_);
-            u_int8_t league = players_[p1]->getLeague();
+            u_int8_t league = playerArr_[p1].getLeague();
             u_int8_t curToGold = 0;
             bool newUC = false;
-            players_[p1]->playMatch(*players_[opponent], randomVal, goldStepRules_,
+            playerArr_[p1].playMatch(playerArr_[opponent], randomVal, goldStepRules_,
                                     stepRequirements_, dropLeague_, newUC);
             ultChamps_ += newUC;
             ++battlesPlayed;
@@ -151,14 +150,14 @@ size_t Simulation::ucPctSimulation(float ultPct){
 
 
 void Simulation::seasonReset(){
-    for (Player* p : players_){
+    for (Player *p = playerArr_; p < playerArr_ + numPlayers_; ++p) {
         p->reset(maxMultiplier_, goldStepRules_[0]);
     }
     queue_->reset();
 }
 
 void Simulation::printAllPlayers(){
-    for (auto &p : players_) {
+    for (Player* p = playerArr_; p < playerArr_ + numPlayers_; ++p) {
         outStream_ << *p << endl;
     }
     outStream_ << endl;

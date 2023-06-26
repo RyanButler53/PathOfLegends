@@ -4,7 +4,7 @@
 
 ## Abstract: 
 
-In this investigation, I model the Path of Legends (PoL). Using this model, I can gain insights about the PoL and determine the effects of moving/removing golden steps on th percntage of players who reach Ultimate champion. After investigating the behavior of 10 different path frameworks, I found two frameworks (one with 55 steps and one with 66 steps) that have a UC attainment rate under 1%, maximize the winrate of players reaching UC and may decrease the number of games to reach UC. These paths can also be climbed almost as fast or faster than the current path in the best case. The two path frameworks are wildly different and the choice of which is "better" depends on the ideological goal for the Path of Legends. 
+In this investigation, I model the Path of Legends (PoL). Using this model, I can gain insights about the PoL and determine the effects of moving/removing golden steps on the percentage of players who reach Ultimate champion. After investigating the behavior of 10 different path frameworks, I found two frameworks (one with 55 steps and one with 66 steps) that have a UC attainment rate under 1%, maximize the winrate of players reaching UC and may decrease the number of games to reach UC. These paths can also be climbed almost as fast or faster than the current path in the best case. The two path frameworks are wildly different and the choice of which is "better" depends on the ideological goal for the Path of Legends. 
 
 <img src="./graphs/shortpaths.png" alt="Best path framework", style="height:200px; width:400px;"/>
 
@@ -54,6 +54,7 @@ There were 10 new path frameworks that were studied in this investigation. When 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 10 | 21 | 32 | 43 | 54 | 65 | 73 | 82 | 93 |
 | Gold Step rule | 2 | 3 | 4 | 5 | 6 | 7 | 0 | 0 | 0 |  N/A |
+
 Drop Leagues: False, Max Multiplier: 9 
 
 | Statistic | Average | St Dev. |
@@ -88,6 +89,7 @@ With a path length of 55, even taking away most of the golden steps, there were 
 
 
 ### 65-step path with less gold steps:
+
 | League | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | UC | 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 5 | 10 | 15 | 21 | 28 | 36 | 45 | 55 | 65 |
@@ -105,11 +107,12 @@ Percent UC:  1.85394
 
 This path was similar to the previous but lengening it by 10 steps. This cut the UC percentage under 2%, but wasn't near the 1% goal.  By lengthening the path, the average number of steps to UC was increased, but unfortunately the same bimodal distribution disappeared and I couldn't preserve the 175 peak seen in the 55-step path. Interestingly, the average finishing step was the same as in the 55-step path.
 
-### 60-step path with no gold steps: 
+### 60-step path with no gold steps:
+ 
  League | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | UC | 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 6 | 13 | 20 | 27 | 34 | 41 | 48 | 54 | 60 |
-| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |  N/A |
+| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A |
 Drop Leagues: True, Max Multiplier: 5
 
 | Statistic | Average | St Dev. |
@@ -124,18 +127,18 @@ Percent UC:  0.54826
 This trial used absolutely no gold steps except for the bottom one. This was the toughest path I experimented with since only 0.54% of players reached the end. The fastest that a player can finish this path is in 50 steps. Due to the difficulty of this path, it took a long time to reach UC for most players.
 
 
-### 55-step path with no gold steps in leagues
+### 55-step path with no gold steps in leagues:
 
 | League | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | UC | 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 6 | 12 | 18 | 24 | 30 | 36 | 42 | 48 | 55 |
-| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |  N/A |
+| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A |
 Drop Leagues: False
 
 Max Multiplier: 4 
 
 Statistic | Average | St Dev. |
-| ------| --- | --- |
+| --- | --- | --- |
 | Finishing Step | 14 | 11.3137 |
 | UC Games Played | 238.2 | 39.4943 |
 | UC Win Percent | 0.603848 | 0.022751 |
@@ -146,24 +149,28 @@ Percent UC:  0.91346
 This path was able to cut the average number of steps to reach UC down slightly and also comes very close to a 1% UC rate. The path can be completed in 49 steps. This also manages to keep golden steps between the leagues, but still shortens the path.
 
 ### 33-step path with no gold steps or multiplier:
+
 | League | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | UC | 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 3 | 6 | 9 | 12 | 16 | 20 | 24 | 28 | 33 |
-| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |  N/A |
+| Gold Step rule | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | N/A |
+
 Drop Leagues: True, Max Multiplier: 1 
 
-| Statistic | Average | St Dev. |
+ Statistic | Average | St Dev. |
 | ------| --- | --- |
 | Finishing Step | 12 | 9.79796 |
 | UC Games Played | 200 | 51.2903 |
 | UC Win Percent | 0.584974 | 0.0286103 |
+
 Percent UC:  10.3074
 
 <img src="./graphs/nogoldnomult.png" alt="Removing most gold steps", style="height:500px; width:500px;"/>
 
 This framework removed all golden steps and the multiplier. Although the steps to reach UC was down to 200, 10% of players reached UC, which is far too high. Once again, this path is too short. The next experiment lengthened this path to 45 steps. 
 
-### 45-step path with no gold steps or multiplier
+### 45-step path with no gold steps or multiplier:
+
 | League | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | UC | 
 | --- | --- |  --- | --- | --- | ---- | --- | --- | --- | --- | --- |
 | Step Requirement | 0 | 4 | 8 | 12 | 16 | 21 | 26 | 32 | 38 | 45 |
@@ -225,7 +232,6 @@ This experiment tried taking the golden steps between leagues out and leaving in
 | Gold Step rule | 2 | 3 | 4 | 5 | 6 | 7 | 0 | 0 | 0 |  N/A |
 Drop Leagues: True, Max Multiplier: 8 
 
-Analysis Files:
 
 | Statistic | Average | St Dev. |
 | ------| --- | --- |

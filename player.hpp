@@ -41,12 +41,12 @@ private:
 
 public:
     // constructors and destructors
-    Player() = delete; // default constructor
+    Player() = default; // default constructor
     Player(size_t id, float partyPct, short oldPB, u_int8_t kingTower, 
             u_int8_t cardLevel, u_int8_t winsToGold);
     Player(const Player &other) = default; // copy constructor
     ~Player() = default;
-    Player &operator=(const Player &other);
+    Player &operator=(const Player &other) = default;
 
     // Methods
 

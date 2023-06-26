@@ -13,12 +13,12 @@ class Simulation
 {
 private:
     std::mt19937 rng_;
-    std::vector<Player*> players_;
     u_int8_t goldStepRules_[10];
     u_int8_t stepRequirements_[10];
     size_t ultChamps_ = 0;
     size_t numPlayers_;
     HashQueue* queue_;
+    Player *playerArr_;
     size_t seed_;
     u_int8_t maxMultiplier_;
     bool dropLeague_;
